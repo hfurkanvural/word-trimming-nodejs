@@ -14,9 +14,11 @@ app.get("/", (req, res) => {
 app.post('/wrapText', (req, res) => {
 
   var { maxLength, inputText } = req.body;
-  if(!maxLength || !inputText)
-    return res.send(404);
   var textList = [];
+
+  if(!maxLength || !inputText)
+    return res.status(400).send(
+      {error: "Max Length and inputText is required.", trimmedWords:textList });
 
   while(inputText.length > maxLength)
   {
