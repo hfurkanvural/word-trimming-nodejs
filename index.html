@@ -1,0 +1,122 @@
+<!DOCTYPE html> 
+<html> 
+      
+<head> 
+    <title> 
+        Word Trimming Example 
+    </title> 
+      
+    <script src= "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script> 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head> 
+  
+<body>  
+    <div class="container">
+      <h3>H. Furkan Vural</h3> 
+      <h4>Rettermobile Test Case</h4>
+      <br/>
+        <div class="form-group">
+          <label for="inputText">Input Text</label>
+          <input type="text" class="form-control" id="inputText" aria-describedby="emailHelp">
+        </div>
+        <div class="form-group">
+          <label for="maxLength">Max Length</label>
+          <input type="number" class="form-control" id="maxLength">
+        </div>
+        <button class="btn btn-primary" id="button">Submit</button>
+        <br/>
+        <br/>
+        <br/>
+        
+        <div class="card" style="width: 18rem;">
+          <ul class="list-group list-group-flush" id="resultList">
+          </ul>
+          <div id="result" role="alert"></div>
+        </div>
+      </div>
+    </div>
+    
+
+    <script> 
+    
+        $( "#button" ).click(function() { 
+          
+          var maxLength = $("#maxLength").val();
+          var inputText = $("#inputText").val();
+
+          var data = "{\"maxLength\": "+ maxLength+", \"inputText\": \""+inputText+"\"}";
+
+          $.ajax({
+            type: "POST",
+            url: "http://localhost:8000/wrapText",
+            data:data,
+            contentType: 'application/json',
+            success: function(data, status){
+              $("#result").removeClass("alert alert-danger");
+              $("#result").addClass( "alert alert-success");
+              if(data.trimmedWords.length > 0)
+              {
+                $('ul.list-group').empty();
+                var cList = $('ul.list-group')
+                var li = $('<li/>')
+                        .addClass('list-group-item')
+                        .attr('role', 'menuitem')
+                        .appendTo(cList);
+                    var aaa = $('<strong/>')
+                        .addClass('ui-all')
+                        .text("Result")
+                        .appendTo(li);
+                $.each(data.trimmedWords, function(i)
+                {
+                    var li = $('<li/>')
+                        .addClass('list-group-item')
+                        .attr('role', 'menuitem')
+                        .appendTo(cList);
+                    var aaa = $('<p/>')
+                        .addClass('ui-all')
+                        .text(data.trimmedWords[i])
+                        .appendTo(li);
+                });
+              }
+              document.getElementById("result").innerHTML = status;
+            },
+            error: function(e) {
+              $("#result").removeClass("alert alert-success");
+              $("#result").addClass( "alert alert-danger");
+              if(e.responseJSON.trimmedWords.length > 0)
+              {
+                $('ul.list-group').empty();
+                var cList = $('ul.list-group')
+                var li = $('<li/>')
+                        .addClass('list-group-item')
+                        .attr('role', 'menuitem')
+                        .appendTo(cList);
+                    var aaa = $('<strong/>')
+                        .addClass('ui-all')
+                        .text("Result")
+                        .appendTo(li);
+                $.each(data.trimmedWords, function(i)
+                {
+                    var li = $('<li/>')
+                        .addClass('list-group-item')
+                        .attr('role', 'menuitem')
+                        .appendTo(cList);
+                    var aaa = $('<p/>')
+                        .addClass('ui-all')
+                        .text(data.trimmedWords[i])
+                        .appendTo(li);
+                });
+              }
+              document.getElementById("result").innerHTML = e.responseJSON.error;
+            },
+        })
+        .then(function (data, status){
+          
+
+        })
+            }); 
+    </script> 
+</body> 
+  
+</html> 
