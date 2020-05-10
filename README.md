@@ -1,4 +1,4 @@
-Simple video streaming app with Node.js
+Simple word trimming example with Node.js
 
 # Installation
 
